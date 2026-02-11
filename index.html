@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cute Birthday Surprise</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: 'Comic Sans MS', cursive;
+      transition: background 2s ease;
+    }
+
+    /* ===== BLACK SCREEN ===== */
+    #overlay {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      flex-direction: column;
+      transition: opacity 1.5s ease;
+    }
+
+    #lightBtn {
+      padding: 15px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 30px;
+      background: #ffb6c1;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 15px pink;
+    }
+
+    #lightBtn:hover {
+      background: #ff85a2;
+    }
+
+    /* ===== GIF BACKGROUND LAYER ===== */
+    .gif-layer {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      display: none;
+    }
+
+    .gif-layer img {
+      position: absolute;
+      width: 200px;
+      opacity: 0.3;
+    }
+
+    .gif1 { top: 10%; left: 5%; }
+    .gif2 { bottom: 10%; right: 5%; }
+
+    /* ===== BULBS ===== */
+    .bulb-row {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 15px 0;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+
+    .bulb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ccc;
+    }
+
+    .bulb.on {
+      background: #fff8a6;
+      box-shadow: 0 0 25px #fff8a6;
+    }
+
+    /* ===== BALLOONS ===== */
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 70px;
+      height: 90px;
+      border-radius: 50%;
+      animation: float 15s infinite ease-in;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+
+    .balloon:after {
+      content:'';
+      position:absolute;
+      width:2px;
+      height:40px;
+      background:white;
+      left:50%;
+      bottom:-40px;
+    }
+
+    @keyframes float {
+      0% { bottom:-150px; }
+      100% { bottom:110%; }
+    }
+
+    /* ===== YOUR CAKE (UNCHANGED STYLE) ===== */
+
+    .cake {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+
+    .layer {
+      position: relative;
+      height: 45px;
+      border-radius: 12px;
+      margin: 5px 0;
+      transform: translateY(-700px);
+      opacity: 0;
+      transition: all 1s cubic-bezier(.25,1.5,.5,1);
+    }
+
+    .layer1 { width: 240px; background: #ff99cc; }
+    .layer2 { width: 200px; background: #ff66b2; }
+    .layer3 { width: 160px; background: #ff3385; }
+
+    .frosting {
+      position: absolute;
+      top: -15px;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background: #8b4513;
+      border-radius: 20px;
+    }
+
+    .frosting::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 20%;
+      width: 20px;
+      height: 20px;
+      background: #8b4513;
+      border-radius: 50%;
+      box-shadow: 
+        40px 0 #8b4513,
+        80px 0 #8b4513,
+        120px 0 #8b4513;
+    }
+
+    .sprinkles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sprinkles::after {
+      content: "✦ ✧ ✦ ✧ ✦ ✧ ✦";
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      top: 10px;
+      color: #fff176;
+      font-size: 14px;
+    }
+
+    .candle {
+      width: 12px;
+      height: 60px;
+      background: white;
+      position: relative;
+      margin-bottom: 5px;
+      transform: translateY(-700px);
+      opacity: 0;
+      transition: all 1s cubic-bezier(.25,1.5,.5,1);
+    }
+
+    .flame {
+      width: 16px;
+      height: 16px;
+      background: radial-gradient(circle, yellow, orange);
+      border-radius: 50%;
+      position: absolute;
+      top: -18px;
+      left: -2px;
+      animation: flicker 0.2s infinite alternate;
+    }
+
+    @keyframes flicker {
+      from { transform: scale(1); }
+      to { transform: scale(1.2); }
+    }
+
+    .drop {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .show {
+      opacity: 1 !important;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- BLACK SCREEN -->
+<div id="overlay">
+  <button id="lightBtn" onclick="turnOn()">💡 Turn On Lights</button>
+</div>
+
+<!-- GIF BACKGROUND -->
+<div class="gif-layer" id="gifLayer">
+  <!-- Replace these with your GIF files -->
+  <img src="giphy(1).gif" class="gif1">
+  <img src="giphy.gif" class="gif2">
+</div>
+
+<!-- BULBS -->
+<div class="bulb-row" id="bulbs">
+  <div class="bulb"></div>
+  <div class="bulb"></div>
+  <div class="bulb"></div>
+  <div class="bulb"></div>
+  <div class="bulb"></div>
+  <div class="bulb"></div>
+</div>
+
+<!-- BALLOONS -->
+<div class="balloon" style="left:10%; background:#ff9aa2;"></div>
+<div class="balloon" style="left:30%; background:#ffdac1;"></div>
+<div class="balloon" style="left:50%; background:#b5ead7;"></div>
+<div class="balloon" style="left:70%; background:#c7ceea;"></div>
+<div class="balloon" style="left:85%; background:#fbc4ab;"></div>
+
+<!-- YOUR CAKE -->
+<div class="cake" id="cake">
+  <div class="candle" id="candle">
+    <div class="flame"></div>
+  </div>
+
+  <div class="layer layer3" id="layer3">
+    <div class="frosting"></div>
+    <div class="sprinkles"></div>
+  </div>
+
+  <div class="layer layer2" id="layer2">
+    <div class="frosting"></div>
+    <div class="sprinkles"></div>
+  </div>
+
+  <div class="layer layer1" id="layer1">
+    <div class="frosting"></div>
+    <div class="sprinkles"></div>
+  </div>
+</div>
+
+<!-- MUSIC (replace file) -->
+<audio id="music" preload="auto" loop>
+  <source src="riverbend-serenade.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+function turnOn(){
+
+  // Remove black screen
+  document.getElementById("overlay").style.opacity = "0";
+  setTimeout(()=>{
+    document.getElementById("overlay").style.display="none";
+  },1000);
+
+  // Cute pastel background
+  document.body.style.background = "linear-gradient(to top, #ffe0f0, #ffc8dd)";
+
+  // Show GIFs
+  document.getElementById("gifLayer").style.display = "block";
+
+  // Turn bulbs on
+  document.getElementById("bulbs").style.opacity = "1";
+  document.querySelectorAll(".bulb").forEach(b=>{
+    b.classList.add("on");
+  });
+
+  // Show balloons
+  document.querySelectorAll(".balloon").forEach(b=>{
+    b.style.opacity="1";
+  });
+
+  // Show cake
+  document.getElementById("cake").classList.add("show");
+
+  // Drop cake
+  const items = ["layer1","layer2","layer3","candle"];
+  items.forEach((id,index)=>{
+    setTimeout(()=>{
+      document.getElementById(id).classList.add("drop");
+    }, index*500);
+  });
+
+  // Play music
+  document.getElementById("music").play().catch(()=>{});
+}
+</script>
+
+</body>
+</html>
