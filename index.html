@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>hampi botdei</title>
-
+  <meta charset="UTF-8">
+  <title>Hampi Botdei</title>
   <style>
+    /* ===== BODY ===== */
     body {
       margin: 0;
       height: 100vh;
@@ -202,16 +203,26 @@
       position: relative;
       top: -24px;
       left: -4px;
-      animation: flicker 0.2s infinite alternate;
+      animation: flicker 0.2s infinite alternate, glowFlame 1s infinite alternate;
     }
 
     @keyframes flicker {
       from { transform: scale(1); }
       to { transform: scale(1.2); }
     }
+    @keyframes glowFlame {
+      0% { box-shadow: 0 0 5px yellow; }
+      100% { box-shadow: 0 0 25px yellow; }
+    }
 
-    .drop { transform: translateY(0); opacity: 1; }
+    .drop { transform: translateY(0); opacity: 1; animation: cakeBounce 0.6s ease; }
     .show { opacity: 1 !important; }
+
+    @keyframes cakeBounce {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
 
     /* ===== ENVELOPE ===== */
     .envelope-container {
@@ -227,18 +238,23 @@
       width: 220px;
       height: 160px;
       cursor: pointer;
-      animation: bounce 2s infinite;
+      animation: bounce 2s infinite, envelopeGlow 1.5s infinite alternate;
       transition: transform 0.2s ease, box-shadow 0.3s ease;
     }
 
     .envelope:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 30px rgba(255,0,150,0.5);
+      transform: scale(1.1) rotate(-2deg);
+      box-shadow: 0 15px 40px rgba(255,0,150,0.6);
     }
 
     @keyframes bounce {
       0%,100% { transform: translateY(0); }
       50% { transform: translateY(-15px); }
+    }
+
+    @keyframes envelopeGlow {
+      0% { box-shadow: 0 0 15px #ff69b4, 0 0 25px #ff4d6d; }
+      100% { box-shadow: 0 0 25px #ff69b4, 0 0 50px #ff4d6d; }
     }
 
     .body-envelope {
@@ -313,20 +329,49 @@
       pointer-events: none;
     }
 
+    /* ===== CONFETTI ===== */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ff4d6d;
+      top: -10px;
+      left: 50%;
+      border-radius: 50%;
+      animation: confettiFall 5s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 500px) {
+      .cake { transform: scale(1); }
+      .banner { font-size: 28px; top: 70px; }
+      .envelope { width: 180px; height: 130px; }
+      .paper { width: 300px; padding: 20px; }
+    }
+
   </style>
 </head>
 
 <body>
 
+<!-- OVERLAY -->
 <div id="overlay">
   <button id="lightBtn" onclick="turnOn()">💡 Turn On Lights</button>
 </div>
 
+<!-- GIFS -->
 <div class="gif-layer" id="gifLayer">
   <img src="giphy1.gif" class="gif1">
-  <img src="giphy2.gif" class="gif2">
+  <img src="giphy.gif" class="gif2">
 </div>
 
+<!-- BULBS -->
 <div class="bulb-row" id="bulbs">
   <div class="bulb"></div>
   <div class="bulb"></div>
@@ -336,16 +381,19 @@
   <div class="bulb"></div>
 </div>
 
+<!-- BANNER -->
 <div class="banner" id="banner">
   🎉✨🎈HAPPY BIRTHDAY !!🎈✨🎉
 </div>
 
+<!-- BALLOONS -->
 <div class="balloon" style="left:10%; background:#ff9aa2;"></div>
 <div class="balloon" style="left:30%; background:#ffdac1;"></div>
 <div class="balloon" style="left:50%; background:#b5ead7;"></div>
 <div class="balloon" style="left:70%; background:#c7ceea;"></div>
 <div class="balloon" style="left:85%; background:#fbc4ab;"></div>
 
+<!-- CAKE -->
 <div class="cake" id="cake">
   <div class="candle" id="candle">
     <div class="flame"></div>
@@ -355,6 +403,7 @@
   <div class="layer layer1" id="layer1"><div class="frosting"></div><div class="sprinkles"></div></div>
 </div>
 
+<!-- ENVELOPE -->
 <div class="envelope-container" id="envelopeContainer">
   <div class="envelope" onclick="openLetter()">
     <div class="flap"></div>
@@ -366,7 +415,6 @@
     <div class="paper">
 02 - 12 - 26 / 01:43 AM 
       <br>
-
 hi, happy birthday !! today is your debut day. I know you might be feeling many emotions right now. maybe you are excited or maybe a little nervous. that is normal. this is a new chapter of your life. it comes with responsibility, but it also comes with beautiful new beginnings.
 
 this day is special because this is the day you were born. The world became lighter when you came into it. I am so glad you exist. I am thankful that I met you. I am even more grateful that I had the chance to call you mine.
@@ -380,6 +428,7 @@ Happy 18th birthday, Bernadette. 🤍🦕
   </div>
 </div>
 
+<!-- MUSIC -->
 <audio id="music" preload="auto" loop>
   <source src="riverbend-serenade.mp3" type="audio/mpeg">
 </audio>
@@ -403,6 +452,16 @@ function turnOn(){
   });
 
   document.getElementById("envelopeContainer").style.opacity = "1";
+
+  // Create confetti
+  for(let i=0;i<40;i++){
+    let conf = document.createElement('div');
+    conf.classList.add('confetti');
+    conf.style.left = Math.random()*100 + 'vw';
+    conf.style.animationDuration = 3 + Math.random()*3 + 's';
+    document.body.appendChild(conf);
+  }
+
   document.getElementById("music").play().catch(()=>{});
 }
 
