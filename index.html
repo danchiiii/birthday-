@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cute Birthday Surprise</title>
+  <title>hampi botdei</title>
 
   <style>
     body {
@@ -224,8 +224,8 @@
 
     .envelope {
       position: relative;
-      width: 200px;
-      height: 140px;
+      width: 220px;
+      height: 160px;
       cursor: pointer;
       animation: bounce 2s infinite;
       transition: transform 0.2s ease, box-shadow 0.3s ease;
@@ -245,7 +245,7 @@
       width: 100%;
       height: 100%;
       background: #ffc8dd;
-      border-radius: 8px;
+      border-radius: 12px;
     }
 
     .flap {
@@ -253,9 +253,9 @@
       top: 0;
       width: 0;
       height: 0;
-      border-left: 100px solid transparent;
-      border-right: 100px solid transparent;
-      border-bottom: 70px solid #ffafcc;
+      border-left: 110px solid transparent;
+      border-right: 110px solid transparent;
+      border-bottom: 80px solid #ffafcc;
       transition: transform 0.6s ease;
       transform-origin: top;
     }
@@ -264,7 +264,7 @@
 
     .letter {
       position: absolute;
-      bottom: 180px;
+      bottom: 200px;
       left: 50%;
       transform: translateX(-50%) scale(0);
       transition: all 0.6s ease;
@@ -299,6 +299,18 @@
       0% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
       100% { transform: translateY(0); }
+    }
+
+    .envelope-label {
+      position: absolute;
+      bottom: -30px;
+      width: 100%;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 12px #ff69b4;
+      pointer-events: none;
     }
 
   </style>
@@ -347,15 +359,17 @@
   <div class="envelope" onclick="openLetter()">
     <div class="flap"></div>
     <div class="body-envelope"></div>
+    <div class="envelope-label">Open Me for Your Gift!</div>
   </div>
 
   <div class="letter" id="letter">
     <div class="paper">
-02 - 12 - 26 / 01:43 AM <br>
+02 - 12 - 26 / 01:43 AM 
+      <br>
 
 hi, happy birthday !! today is your debut day. I know you might be feeling many emotions right now. maybe you are excited or maybe a little nervous. that is normal. this is a new chapter of your life. it comes with responsibility, but it also comes with beautiful new beginnings.
 
-this day is special because this is the day you were born. the world became lighter when you came into it. I am so glad you exist. I am thankful that I met you. I am even more grateful that I had the chance to call you mine.
+this day is special because this is the day you were born. The world became lighter when you came into it. I am so glad you exist. I am thankful that I met you. I am even more grateful that I had the chance to call you mine.
 
 please enjoy your day with all your heart. celebrate yourself. you deserve love, peace, and all the good things in life. I hope all your wishes come true, especially the ones you do not always say out loud. I hope this new year of your life will be calm, meaningful, and full of happiness.
 
@@ -365,6 +379,10 @@ Happy 18th birthday, Bernadette. 🤍🦕
     </div>
   </div>
 </div>
+
+<audio id="music" preload="auto" loop>
+  <source src="riverbend-serenade.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 function turnOn(){
@@ -385,6 +403,7 @@ function turnOn(){
   });
 
   document.getElementById("envelopeContainer").style.opacity = "1";
+  document.getElementById("music").play().catch(()=>{});
 }
 
 function openLetter(){
